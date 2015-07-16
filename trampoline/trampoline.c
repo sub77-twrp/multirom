@@ -36,6 +36,8 @@
 #include "../hooks.h"
 #include "encryption.h"
 
+#include "Populate_M7_byname.c"
+
 #define EXEC_MASK (S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
 #define REALDATA "/realdata"
 #define MULTIROM_BIN "multirom"
@@ -335,6 +337,9 @@ int main(int argc, char *argv[])
         ERROR("Waiting too long for fb0");
         goto exit;
     }
+
+    //nkk71 M7 hack
+    Populate_M7_byname();
 
     fstab = fstab_auto_load();
     if(!fstab)
