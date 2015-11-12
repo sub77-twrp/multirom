@@ -32,6 +32,8 @@
 #include "../lib/util.h"
 #include "../lib/log.h"
 
+#include <cutils/properties.h>  // see adb_quit below
+
 static pthread_t adb_thread;
 static volatile int run_thread = 0;
 static pid_t adb_pid = -1;
@@ -115,6 +117,31 @@ void adb_quit(void)
 
     INFO("Stopping adbd\n");
 
+    // The following comment is about the HTC One M7
+    // and possibly other devices
+    // (seems to be the case for the M8 too)
+
+    // Not terminating adbd would result
+    // in MTP,adb not working when the primary
+    // ROM boots.
+
+    // However the original: kill(adb_pid, 9); does
+    // not seem to be effective, as adbd seems to just
+    // restart.
+
+    // The following: property_set("ctl.stop", "adbd");
+    // works better, but is still dependant on kernel
+    // so eg, on ElementalX, it has no effect, but on
+    // CynagonMod it worked properly.
+
+    // Since this is not reliable enough, I'm using
+    // the "usb_function_switch", "130" instead, as
+    // this is working properly, and leaving the below
+    // commented out for the time being.
+
+    /* property_set("ctl.stop", "adbd"); */
+
+
     run_thread = 0;
 
     if(adb_pid != -1)
@@ -124,6 +151,9 @@ void adb_quit(void)
     }
 
     pthread_join(adb_thread, NULL);
+
+
+    /* property_set("ctl.stop", "adbd"); */
 }
 
 void adb_init_usb(void)
