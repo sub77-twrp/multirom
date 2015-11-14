@@ -139,7 +139,16 @@ void adb_quit(void)
     // this is working properly, and leaving the below
     // commented out for the time being.
 
-    /* property_set("ctl.stop", "adbd"); */
+    // UPDATE: I'm reenabling the below ctl.stop commands
+    // though it seems they do nothing on ElementalX
+    // on CynagonMod (tested version cm-12.1-20151103-NIGHTLY-m7)
+    // the system/kernel will not boot until you unplug the USB
+    // cable, the below ctl.stop commands, fix that "hanging"
+    // issue. My only assumption, is that the "lingering" adbd
+    // not being stopped while connected to USB, is making the
+    // kernel "wait/hang" until it's released.
+
+    property_set("ctl.stop", "adbd");
 
 
     run_thread = 0;
@@ -153,7 +162,7 @@ void adb_quit(void)
     pthread_join(adb_thread, NULL);
 
 
-    /* property_set("ctl.stop", "adbd"); */
+    property_set("ctl.stop", "adbd");
 }
 
 void adb_init_usb(void)
