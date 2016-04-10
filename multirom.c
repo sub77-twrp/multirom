@@ -1569,7 +1569,7 @@ int multirom_prep_android_mounts(struct multirom_status *s, struct multirom_rom 
     struct fstab_part *fw_part = NULL;
     int res = -1;
 
-    sprintf(path, "%s/firmware.img", rom->base_path);
+    sprintf(path, "%s/firmware-modem.img", rom->base_path);
     has_fw = (access(path, R_OK) >= 0);
 
     sprintf(path, "%s/boot", rom->base_path);
@@ -1611,7 +1611,7 @@ int multirom_prep_android_mounts(struct multirom_status *s, struct multirom_rom 
     mkdir_with_perms("/data", 0771, "system", "system");
     mkdir_with_perms("/cache", 0770, "system", "cache");
     if(has_fw)
-        mkdir_with_perms("/firmware", 0771, "system", "system");
+        mkdir_with_perms("/firmware-modem", 0771, "system", "system");
 
     static const char *folders[2][3] =
     {
@@ -1651,7 +1651,7 @@ int multirom_prep_android_mounts(struct multirom_status *s, struct multirom_rom 
     if(has_fw && fw_part)
     {
         INFO("Mounting ROM's FW image instead of FW partition\n");
-        snprintf(from, sizeof(from), "%s/firmware.img", rom->base_path);
+        snprintf(from, sizeof(from), "%s/firmware-modem.img", rom->base_path);
         fw_part->device = realloc(fw_part->device, strlen(from)+1);
         strcpy(fw_part->device, from);
         multirom_inject_fw_mounter(s, fw_part);
@@ -1730,7 +1730,7 @@ int multirom_process_android_fstab(char *fstab_name, int has_fw, struct fstab_pa
 
     if(has_fw)
     {
-        struct fstab_part *p = fstab_find_first_by_path(tab, "/firmware");
+        struct fstab_part *p = fstab_find_first_by_path(tab, "/firmware-modem");
         if(p)
         {
             *fw_part = fstab_clone_part(p);
