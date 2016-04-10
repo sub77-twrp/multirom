@@ -329,7 +329,7 @@ int nokexec_cleanup(void)
     int res = 0;
 
     if (access(nokexec()->path_primary_bootimg, R_OK) == 0)
-        INFO("nkk71: deleting primary boot.img, the backup is no longer needed; res=%d\n", res |= remove(nokexec()->path_primary_bootimg));
+        INFO("nkk71: not deleting primary boot.img, the backup needed; res=%d\n");
 
     // legacy
     char path_last2nd_bootimg[256];
