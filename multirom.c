@@ -910,7 +910,7 @@ int multirom_default_status(struct multirom_status *s)
     }
 
     s->auto_boot_rom = s->current_rom;
-    s->auto_boot_seconds = 5;
+    s->auto_boot_seconds = 15;
     s->auto_boot_type = AUTOBOOT_NAME;
 
     return 0;
